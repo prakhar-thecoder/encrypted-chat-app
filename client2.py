@@ -52,7 +52,9 @@ if __name__ == '__main__':
     # Generate key pair for client2
     public_key, private_key = key_selection(p, g)
 
-    client_socket = socket.create_connection(("127.0.0.1", 8888))
+    ip = input("Enter IP Address to connect: ")
+
+    client_socket = socket.create_connection((ip, 8888))
     print(f"Connected to Client1\nPublic key: {public_key}")
 
     # Receive public key from client1 (server)

@@ -1,8 +1,21 @@
+import os
 import socket
 import threading
 import random
 from sympy import mod_inverse
 
+
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't need to connect, just triggers route discovery
+        s.connect(('8.8.8.8', 80))
+        local_ip = s.getsockname()[0]
+    except Exception:
+        local_ip = '127.0.0.1'
+    finally:
+        s.close()
+    return local_ip
 
 # Key generation for ElGamal
 def key_selection(p: int, g: int):
@@ -53,9 +66,10 @@ if __name__ == '__main__':
     public_key, private_key = key_selection(p, g)
 
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind(("127.0.0.1", 8888))
+    server.bind(("0.0.0.0", 8888))
     server.listen(1)
     print(f"\nClient1 started...\nPublic key: {public_key}")
+    print(f"IP Address: {get_local_ip()}")
 
     client_socket, client_address = server.accept()
 
